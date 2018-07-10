@@ -30,7 +30,7 @@ contract BasicIterator {
     	while(i < integers.length)
         {
         	sum = sum + integers[i];
-        	i++; // i=i+1 [incrementing]
+        	i++; // i=i+1 [incrementing values]
         }
         
     	return sum;
