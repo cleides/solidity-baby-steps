@@ -2,12 +2,14 @@
 	This is a very simple demonstration of a while loops. Same as JS/c.
 */
 
+pragma solidity ^0.4.24;
 contract BasicIterator {
 
     address creator;                  // reserve one "address"-type spot
-    uint8[10] integers;               // reserve a chunk of storage for 10 8-bit unsigned integers in an array
+    uint8[100] integers;               // reserve a chunk of storage for 10 8-bit unsigned integers in an array
 
-    function BasicIterator() 
+    constructor()
+    public
     {
         creator = msg.sender;         // set the creator address
         uint8 x = 0;                  // initialize an 8-bit, unsigned integer to zero
@@ -18,15 +20,19 @@ contract BasicIterator {
         }
     }
     
-    function getSum() constant returns (uint)  // "constant" just means this function returns something to the caller
+    function getSum() 
+    public
+    constant returns (uint)  // "constant" just means this function returns something to the caller
     {                                          // which is immediately followed by what type gets returned, in this case a full uint256
-    	uint8 sum = 0;
-    	uint8 x = 0;
-    	while(x < integers.length)
+    	uint sum = 0;
+    	
+    	uint8 i = 0;
+    	while(i < integers.length)
         {
-        	sum = sum + integers[x];
-        	x++;
+        	sum = sum + integers[i];
+        	i++; // i=i+1 [incrementing]
         }
+        
     	return sum;
     }
     
@@ -35,10 +41,11 @@ contract BasicIterator {
      **********/
     
     function kill()
+    public
     { 
         if (msg.sender == creator)
         {
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
+            selfdestruct(creator);  // kills this contract and sends remaining funds back to creator
         }
     }
 }
