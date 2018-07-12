@@ -4,40 +4,55 @@
 	Later on, creator.balance will reflect whatever it is now.
 */
 
+pragma solidity ^0.4.24;
 contract creatorBalanceChecker {
-
+    
     address creator;
     uint creatorbalance; 		// TIP: uint is an alias for uint256. Ditto int and int256.
 
-    function creatorBalanceChecker() public 
+    constructor() 
+    public 
+    payable
     {
-        creator = msg.sender; 								 // msg is a global variable
-        creatorbalance = creator.balance;
+        creator = msg.sender; 			  // copied by reference  // msg is a global variable
+        creatorbalance = creator.balance; // copied by value
     }
 
-	function getContractAddress() constant returns (address) 
+	function getContractAddress()
+	public
+	view
+	returns (address) 
 	{
 		return this;
 	}
 
-	function getCreatorBalance() constant returns (uint)     // Will return the creator's balance AT THE TIME THIS CONTRACT WAS CREATED
+	function getCreatorBalance() 
+	public
+	view
+	returns (uint)     // Will return the creator's balance AT THE TIME THIS CONTRACT WAS CREATED
 	{
         return creatorbalance;
     }
     
-    function getCreatorDotBalance() constant returns (uint)  // Will return creator's balance NOW
+    function getCreatorBalanceNow() 
+    public
+    view 
+    returns (uint)  // Will return creator's balance NOW because creator is copied by reference because it is an object.
     {
-        return creator.balance;
+        return creator.balance;  
     }
     
-    /**********
+    /*
      Standard kill() function to recover funds 
-     **********/
-    
+    */
     function kill()
+    public
     { 
-        if (msg.sender == creator)
-            suicide(creator);  // kills this contract and sends remaining funds back to creator
-    }
+        if (msg.sender == creator) // == The comparison operator
+        {
+            selfdestruct (creator);  // kills this contract and sends remaining funds back to creator
+        }
+            
+    }   
         
 }
